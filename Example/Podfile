@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'JLCustomPagingView_Example', :exclusive => true do
+  pod 'JLCustomPagingView', :path => '../'
+end
+
+target 'JLCustomPagingView_Tests', :exclusive => true do
+  pod 'JLCustomPagingView', :path => '../'
+
+  
+end
