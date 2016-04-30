@@ -1,0 +1,6 @@
+framework module Pods_JLCustomPagingView_Tests {
+  umbrella header "Pods-JLCustomPagingView_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}

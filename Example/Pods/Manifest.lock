@@ -1,0 +1,14 @@
+PODS:
+  - JLCustomPagingView (0.1.0)
+
+DEPENDENCIES:
+  - JLCustomPagingView (from `../`)
+
+EXTERNAL SOURCES:
+  JLCustomPagingView:
+    :path: ../
+
+SPEC CHECKSUMS:
+  JLCustomPagingView: fc0e44e6d0fca8a3beca51230fec076a2781c4d3
+
+COCOAPODS: 0.39.0

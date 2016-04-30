@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = "JLCustomPagingView"
   s.version          = "0.1.0"
-  s.summary          = "A short description of JLCustomPagingView."
+  s.summary          = "JLCustomPagingView presenting diferent views and view controller on diferent way."
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -17,22 +17,22 @@ Pod::Spec.new do |s|
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
-  s.description      = <<-DESC
-                       DESC
+  s.description      = "This is a library created to help all developers that do not want to use the scrollView or the PageViewController to present diferent views and viewcontrollers and do not want to waste precious time creating his own.Simple to implement and understand
+JLCustomPagingView will help you to improve your time."
 
-  s.homepage         = "https://github.com/<GITHUB_USERNAME>/JLCustomPagingView"
+  s.homepage         = "https://github.com/josechagas/JLCustomPagingView"
   # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
   s.license          = 'MIT'
   s.author           = { "José Lucas" => "joselucas1994@yahoo.com.br" }
-  s.source           = { :git => "https://github.com/<GITHUB_USERNAME>/JLCustomPagingView.git", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/josechagas/JLCustomPagingView.git", :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'JLCustomPagingView/Classes/**/*'
-  s.resource_bundles = {
-    'JLCustomPagingView' => ['JLCustomPagingView/Assets/*.png']
-  }
+  s.source_files = 'Pod/Classes/*.swift'
+#s.resource_bundles = {
+#   'JLCustomPagingView' => ['JLCustomPagingView/Assets/*.png']
+# }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
