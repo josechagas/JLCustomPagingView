@@ -227,8 +227,12 @@ public class JLCustomPagingView: UIView {
                 }
                 return false
             }
-            
-            actualItemIndex = self.distToRightArray.indexOf(elements.first!)!
+            if elements.count > 0{
+                actualItemIndex = self.distToRightArray.indexOf(elements.first!)!
+            }
+            else{
+                actualItemIndex = 0
+            }
             
             return actualItemIndex
             
