@@ -49,7 +49,18 @@ public class JLCustomPagingView: UIView {
     /**
      The actual number of items added to this JLCustomPagingView
      */
-    private var numbOfItems:Int = 0
+    private var numbOfItems:Int = 0{
+        didSet{
+            if numbOfItems > 0{
+                panGesture.enabled = true
+                tapGesture.enabled = true
+            }
+            else{
+                panGesture.enabled = false
+                tapGesture.enabled = false
+            }
+        }
+    }
     
     //gesture variables
     private var tapGesture:UITapGestureRecognizer!
@@ -103,7 +114,7 @@ public class JLCustomPagingView: UIView {
     
     
     override public func willMoveToWindow(newWindow: UIWindow?) {
-        if let _ = newWindow{
+        if let _ = newWindow  where numbOfItems > 0{
             self.panGesture.enabled = true
             self.tapGesture.enabled = true
         }
@@ -112,10 +123,28 @@ public class JLCustomPagingView: UIView {
             self.tapGesture.enabled = false
         }
     }
+    
+    
+    
+    
     //MARK: - Configuration,Control and Update methods
     /**
      Loads the data for this JLCustomPagingView for the first time
      */
+    
+    private func resetState(){
+        self.goToItemWithIndex(0)
+        numbOfItems = 0
+        panPrimaryIndex = 0
+        panSecondaryIndex = 0
+        lastPanTouch = CGPoint.zero
+        distToRightArray.removeAll()
+        for contentView in items{
+            contentView.removeFromSuperview()
+        }
+        items.removeAll()
+    }
+    
     private func loadData(){
         if let dataSOurce = dataSource{
             if numbOfItems > 0{
@@ -143,17 +172,21 @@ public class JLCustomPagingView: UIView {
             if let dataSOurce = self.dataSource{
                 
                 self.numbOfItems = dataSOurce.numbOfItems()
-                
-                if self.numbOfItems < self.items.count{//removed some elements
+                if self.numbOfItems == 0{
+                    self.resetState()
+                }
+                else if self.numbOfItems < self.items.count{//removed some elements
                     
                     self.goToItemWithIndex(0)
-                    
-                    for i in self.numbOfItems..<self.items.count{
+
+                    for i in (self.numbOfItems..<self.items.count).reverse(){
+                        self.distToRightArray.removeAtIndex(i)
                         let contentView = self.items[i] //remove the last ones
                         contentView.removeFromSuperview()
                         self.items.removeAtIndex(i)
                         
                     }
+                    
                     for i in 0..<self.items.count{//update the rest of them
                         self.updateContentViewWithIndex(i,newItem: dataSOurce.itemAtIndex(i))
                     }
@@ -338,10 +371,11 @@ public class JLCustomPagingView: UIView {
         
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(JLCustomPagingView.panAction(_:)))
         self.addGestureRecognizer(panGesture)
-        
+        panGesture.enabled = false
         tapGesture = UITapGestureRecognizer(target: self, action: #selector(JLCustomPagingView.tapAction(_:)))
         
         self.addGestureRecognizer(tapGesture)
+        tapGesture.enabled = false
     }
     
     func tapAction(tapGes:UITapGestureRecognizer){
@@ -395,32 +429,57 @@ public class JLCustomPagingView: UIView {
                 indexTwo = panSecondaryIndex
             }
             
-            
-            let currentDistToRight:NSLayoutConstraint = self.distToRightArray[indexOne < 0 ? 0 : indexOne]
-            
-            if currentDistToRight.constant >= -self.frame.width/2 {//move right to correct position
-                
-                if indexTwo < numbOfItems - 1 && indexTwo > 0{
-                    moveInItemWithIndex(indexTwo,animated: true,fihishedCompletion: nil)
+            let velocity = panGes.velocityInView(self)
+                        
+            if abs(Int32(velocity.x/self.frame.width)) > 5{//its on speed of a swipe
+                if velocity.x/self.frame.width > 0{
+                    if indexTwo < numbOfItems - 1 && indexTwo > 0{
+                        moveInItemWithIndex(indexTwo,animated: true,fihishedCompletion: nil)
+                    }
+                    if indexOne >= 0 && indexOne < numbOfItems - 1 {
+                        moveAsTopItemWithIndex(indexOne,animated: true,fihishedCompletion: nil)
+                    }
                 }
-                if indexOne >= 0 && indexOne < numbOfItems - 1 {
-                    moveAsTopItemWithIndex(indexOne,animated: true,fihishedCompletion: nil)
+                else{
+                    if /*panPrimaryIndex*/indexOne < numbOfItems - 1{
+                        moveOutItemWithIndex(indexOne,animated: true,fihishedCompletion: nil)
+                        
+                        if /*panSecondaryIndex*/indexTwo < numbOfItems - 1{//if its not the last one move it
+                            moveAsTopItemWithIndex(indexTwo,animated: true,fihishedCompletion: nil)
+                        }
+                        
+                    }
                 }
-                
             }
+            else{
+                let currentDistToRight:NSLayoutConstraint = self.distToRightArray[indexOne < 0 ? 0 : indexOne]
                 
-            else if currentDistToRight.constant <= -self.frame.width/2{//move left to correct position
-                
-                if /*panPrimaryIndex*/indexOne < numbOfItems - 1{
-                    moveOutItemWithIndex(indexOne,animated: true,fihishedCompletion: nil)
+                if currentDistToRight.constant >= -self.frame.width/2 {//move right to correct position
                     
-                    if /*panSecondaryIndex*/indexTwo < numbOfItems - 1{//if its not the last one move it
-                        moveAsTopItemWithIndex(indexTwo,animated: true,fihishedCompletion: nil)
+                    if indexTwo < numbOfItems - 1 && indexTwo > 0{
+                        moveInItemWithIndex(indexTwo,animated: true,fihishedCompletion: nil)
+                    }
+                    if indexOne >= 0 && indexOne < numbOfItems - 1 {
+                        moveAsTopItemWithIndex(indexOne,animated: true,fihishedCompletion: nil)
                     }
                     
                 }
-                
+                    
+                else if currentDistToRight.constant <= -self.frame.width/2{//move left to correct position
+                    
+                    if /*panPrimaryIndex*/indexOne < numbOfItems - 1{
+                        moveOutItemWithIndex(indexOne,animated: true,fihishedCompletion: nil)
+                        
+                        if /*panSecondaryIndex*/indexTwo < numbOfItems - 1{//if its not the last one move it
+                            moveAsTopItemWithIndex(indexTwo,animated: true,fihishedCompletion: nil)
+                        }
+                        
+                    }
+                    
+                }
+
             }
+            
             
             checkForChangesOnCurrentItemIndex()
         }
@@ -650,6 +709,7 @@ public class JLCustomPagingView: UIView {
                 }
                 
             }
+            
             if index == numbOfItems - 1{
                 self.moveInItemWithIndex(index,animated:false, fihishedCompletion:nil)
                 
@@ -659,6 +719,9 @@ public class JLCustomPagingView: UIView {
                 
             }
             
+        }
+        else if numbOfItems == 0{
+            actualItemIndex = 0
         }
         
         

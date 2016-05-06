@@ -74,6 +74,7 @@ class ViewController: UIViewController,CustomPagingViewDataSource,CustomPagingVi
       
         performSegueWithIdentifier("ViewControllerToDetail", sender: index)
         
+        
     }
     
     func didChangeTopItemIndexTo(newTopItemIndex: Int, lastTopItemIndex: Int) {
