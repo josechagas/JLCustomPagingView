@@ -128,10 +128,10 @@ public class JLCustomPagingView: UIView {
     
     
     //MARK: - Configuration,Control and Update methods
-    /**
-     Loads the data for this JLCustomPagingView for the first time
-     */
     
+    /**
+     Reset the state of everything, so it returns to all default values so return to the first view of added to it.
+     */
     private func resetState(){
         self.goToItemWithIndex(0)
         numbOfItems = 0
@@ -145,6 +145,9 @@ public class JLCustomPagingView: UIView {
         items.removeAll()
     }
     
+    /**
+     Loads the data for this JLCustomPagingView for the first time
+     */
     private func loadData(){
         if let dataSOurce = dataSource{
             if numbOfItems > 0{
@@ -367,6 +370,9 @@ public class JLCustomPagingView: UIView {
     
     //MARK: - Gestures methods
     
+    /**
+     Add all necessary gestures like pan, tap gestures
+     */
     private func addGestures(){
         
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(JLCustomPagingView.panAction(_:)))
@@ -377,6 +383,7 @@ public class JLCustomPagingView: UIView {
         self.addGestureRecognizer(tapGesture)
         tapGesture.enabled = false
     }
+    
     
     func tapAction(tapGes:UITapGestureRecognizer){
         let index = actualItemIndex
@@ -510,7 +517,9 @@ public class JLCustomPagingView: UIView {
         }
     }
     
-    
+    /**
+     Move the view on primary index and secondary index by some value
+     */
     private func moveByItemWithIndex(primaryIndex:Int,secondaryIndex:Int,quant:CGFloat){
         
         
