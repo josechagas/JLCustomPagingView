@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "JLCustomPagingView"
-  s.version          = "0.1.3"
+  s.version          = "0.1.4"
   s.summary          = "JLCustomPagingView presenting diferent views and view controller on diferent way."
 
 # This description is used to generate tags and improve search results.

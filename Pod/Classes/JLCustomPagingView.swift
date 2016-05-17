@@ -431,7 +431,7 @@ public class JLCustomPagingView: UIView {
             
             let velocity = panGes.velocityInView(self)
                         
-            if abs(Int32(velocity.x/self.frame.width)) > 5{//its on speed of a swipe
+            if abs(Int32(velocity.x/self.frame.width)) > 4{//its on speed of a swipe
                 if velocity.x/self.frame.width > 0{
                     if indexTwo < numbOfItems - 1 && indexTwo > 0{
                         moveInItemWithIndex(indexTwo,animated: true,fihishedCompletion: nil)
